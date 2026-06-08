@@ -1,3 +1,5 @@
+set dotenv-load
+
 # Run all CI checks
 check:
     nix flake check
@@ -11,3 +13,9 @@ check:
 fmt:
     nix run nixpkgs#alejandra -- .
     nix run nixpkgs#shfmt -- -i 2 -w bootstrap.sh
+
+# Sync to VM, apply home-manager, pull back flake.lock
+sync:
+    rsync -av ./ ubuntu@{{VM_IP}}:~/devbox/
+    ssh ubuntu@{{VM_IP}} 'source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh && cd ~/devbox && home-manager switch --flake .#ubuntu'
+    scp ubuntu@{{VM_IP}}:~/devbox/flake.lock ./flake.lock
