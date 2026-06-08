@@ -32,6 +32,15 @@ After a successful apply, pull `flake.lock` back and commit it:
 scp ubuntu@<VM_IP>:~/devbox/flake.lock ./flake.lock
 ```
 
+## Before committing
+
+Run formatters to avoid CI failures:
+
+```bash
+/nix/var/nix/profiles/default/bin/nix run nixpkgs#alejandra --extra-experimental-features 'nix-command flakes' -- .
+shfmt -i 2 -w bootstrap.sh
+```
+
 ## Common commands
 
 Apply a changed `home.nix` (after the initial bootstrap):
