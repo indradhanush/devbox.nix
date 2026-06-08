@@ -15,3 +15,14 @@ Re-login after for docker group membership.
 ```bash
 home-manager switch --flake .#ubuntu
 ```
+
+## Local development (macOS)
+
+Enable nix experimental features once so `just fmt` and `just check` work without extra flags:
+
+```bash
+mkdir -p ~/.config/nix
+echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
+```
+
+CI sets this automatically via `cachix/install-nix-action`.
