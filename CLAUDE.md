@@ -16,21 +16,15 @@ The flake targets `x86_64-linux` and hardcodes username `ubuntu`. Both must matc
 
 ## Verification (mandatory)
 
-Every change to `home.nix` or `flake.nix` must be tested on the VM before the change is considered done:
+Every change to `home.nix` or `flake.nix` must be tested on the VM before the change is considered done.
+
+Set `VM_IP` in `.env` (see `.env.example`), then:
 
 ```bash
-# 1. sync local changes to VM
-rsync -av ./ ubuntu@<VM_IP>:~/devbox/
-
-# 2. apply and verify
-ssh ubuntu@<VM_IP> 'source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh && cd ~/devbox && home-manager switch --flake .#ubuntu'
+just sync
 ```
 
-After a successful apply, pull `flake.lock` back and commit it:
-
-```bash
-scp ubuntu@<VM_IP>:~/devbox/flake.lock ./flake.lock
-```
+This syncs local changes, applies home-manager on the VM, and pulls `flake.lock` back.
 
 ## Before committing
 
