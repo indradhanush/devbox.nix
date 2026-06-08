@@ -34,11 +34,14 @@ scp ubuntu@<VM_IP>:~/devbox/flake.lock ./flake.lock
 
 ## Before committing
 
-Run formatters to avoid CI failures:
-
 ```bash
-/nix/var/nix/profiles/default/bin/nix run nixpkgs#alejandra --extra-experimental-features 'nix-command flakes' -- .
-shfmt -i 2 -w bootstrap.sh
+just fmt    # auto-format all files
+just check  # run all CI checks locally
+```
+
+On macOS, if `nix` is not in your shell PATH, source the profile first:
+```bash
+source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
 ```
 
 ## Common commands
@@ -52,12 +55,6 @@ Update all flake inputs and re-pin `flake.lock`:
 ```bash
 nix flake update
 home-manager switch --flake .#ubuntu
-```
-
-Verify the script before committing changes to `bootstrap.sh`:
-```bash
-shellcheck bootstrap.sh
-shfmt -i 2 -d bootstrap.sh
 ```
 
 Re-run bootstrap on a new VM (idempotent — safe to run again):
