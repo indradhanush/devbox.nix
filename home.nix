@@ -4,6 +4,7 @@
   home.stateVersion = "24.11";
 
   home.packages = with pkgs; [
+    asdf-vm
     go
     gnumake
   ];
