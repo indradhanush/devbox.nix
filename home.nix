@@ -5,6 +5,8 @@
 
   home.packages = with pkgs; [
     asdf-vm
+    gh
+    git
     go
     gnumake
   ];
