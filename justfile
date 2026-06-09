@@ -17,6 +17,11 @@ update:
     nix flake update
     just sync
 
+# Bootstrap a fresh VM (sync files first, then run bootstrap.sh)
+bootstrap:
+    rsync -av ./ ubuntu@$VM_IP:~/devbox/
+    ssh ubuntu@$VM_IP 'bash ~/devbox/bootstrap.sh'
+
 # Sync to VM, apply home-manager, pull back flake.lock
 sync:
     rsync -av ./ ubuntu@$VM_IP:~/devbox/
