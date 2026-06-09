@@ -25,5 +25,5 @@ bootstrap:
 # Sync to VM, apply home-manager, pull back flake.lock
 sync:
     rsync -av ./ ubuntu@$VM_IP:~/devbox/
-    ssh ubuntu@$VM_IP 'source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh && cd ~/devbox && home-manager switch --flake .#ubuntu'
+    ssh ubuntu@$VM_IP 'source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh && cd ~/devbox && home-manager switch -b backup --flake .#ubuntu'
     scp ubuntu@$VM_IP:~/devbox/flake.lock ./flake.lock
