@@ -15,6 +15,8 @@
 
   programs.home-manager.enable = true;
 
+  programs.zsh.enable = true;
+
   programs.bash = {
     enable = true;
     initExtra = ''

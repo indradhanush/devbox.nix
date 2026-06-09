@@ -61,6 +61,29 @@ https://download.docker.com/linux/ubuntu ${codename} stable" |
     docker-buildx-plugin docker-compose-plugin
 }
 
+configure_zsh_shell() {
+  local zsh_path="${HOME}/.nix-profile/bin/zsh"
+  if [[ ! -x "$zsh_path" ]]; then
+    log "zsh not found at ${zsh_path}, skipping shell configuration"
+    return
+  fi
+  if grep -qF "$zsh_path" /etc/shells; then
+    log "zsh already in /etc/shells, skipping"
+  else
+    log "adding ${zsh_path} to /etc/shells"
+    echo "$zsh_path" | sudo tee -a /etc/shells >/dev/null
+  fi
+  local current_shell
+  current_shell=$(getent passwd "$(whoami)" | cut -d: -f7)
+  if [[ "$current_shell" == "$zsh_path" ]]; then
+    log "zsh already set as login shell, skipping"
+    return
+  fi
+  log "setting zsh as login shell for $(whoami)"
+  sudo chsh -s "$zsh_path" "$(whoami)"
+  log "zsh set as login shell — re-login or new SSH session to take effect"
+}
+
 configure_docker_group() {
   local username
   username=$(whoami)
@@ -78,6 +101,7 @@ main() {
   install_nix
   source_nix
   apply_home_manager
+  configure_zsh_shell
   install_docker
   configure_docker_group
   log "bootstrap complete"
