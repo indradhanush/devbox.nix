@@ -12,6 +12,11 @@ fmt:
     nix run nixpkgs#alejandra -- .
     nix run nixpkgs#shfmt -- -i 2 -w bootstrap.sh
 
+# Update flake inputs and apply to VM
+update:
+    nix flake update
+    just sync
+
 # Sync to VM, apply home-manager, pull back flake.lock
 sync:
     rsync -av ./ ubuntu@$VM_IP:~/devbox/
