@@ -18,7 +18,7 @@ The flake targets `x86_64-linux` and hardcodes username `ubuntu`. Both must matc
 
 Every change to `home.nix` or `flake.nix` must be tested on the VM before the change is considered done.
 
-Set `VM_IP` in `.env` (see `.env.example`), then:
+Set `VM_IP` in `.envrc` (see `.envrc.example`), then:
 
 ```bash
 just sync
