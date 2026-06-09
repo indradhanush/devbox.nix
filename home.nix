@@ -14,4 +14,11 @@
   };
 
   programs.home-manager.enable = true;
+
+  programs.bash = {
+    enable = true;
+    initExtra = ''
+      . ${pkgs.asdf-vm}/share/asdf-vm/asdf.sh
+    '';
+  };
 }
