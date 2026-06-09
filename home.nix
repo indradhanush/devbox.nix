@@ -7,6 +7,7 @@
       asdf-vm
       gh
       git
+      gcc
       go
       just
       gnumake
