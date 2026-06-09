@@ -1,5 +1,7 @@
 # devbox
 
+[![CI](https://github.com/indradhanush/devbox.nix/actions/workflows/ci.yml/badge.svg)](https://github.com/indradhanush/devbox.nix/actions/workflows/ci.yml)
+
 Reproducible dev box for Ubuntu 24.04.
 
 ## Setup
