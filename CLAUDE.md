@@ -16,18 +16,20 @@ The flake targets `x86_64-linux` and hardcodes username `ubuntu`. Both must matc
 
 ## Change workflow (mandatory)
 
-For every change to `home.nix` or `flake.nix`:
+For every change to any file in this repo (`home.nix`, `flake.nix`, `bootstrap.sh`, etc.):
 
 1. Make the change
 2. Run `just fmt && just check` to catch formatting/lint issues early
 3. Run `just sync` — syncs to the VM, applies home-manager, pulls back `flake.lock`
 4. If `just sync` fails, fix the issue and go back to step 3
-5. Only commit once `just sync` succeeds
+5. **Verify the behavior on the VM** — SSH in and confirm the specific change took effect (e.g. check `/etc/shells`, run the installed tool, inspect config files). Do not assume sync success means the change is correct.
+6. Only commit once `just sync` succeeds **and** the behavior is verified
 
 ```bash
 just fmt && just check   # format and lint
 just sync                # apply to VM — must succeed before committing
 just fmt && just check   # re-run after sync pulls back flake.lock
+ssh ubuntu@$VM_IP        # verify behavior on the VM
 # then commit
 ```
 
