@@ -8,7 +8,6 @@
       gh
       git
       gcc
-      go
       just
       gnumake
     ];
