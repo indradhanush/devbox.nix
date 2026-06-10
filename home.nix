@@ -42,8 +42,8 @@ in {
       enable = true;
       initContent = lib.mkAfter ''
         ${asdfInit}
-        # %~ = cwd (~-abbreviated), %# = # for root else %.
-        PROMPT='%~ %# '
+        # %m = hostname, %~ = cwd (~-abbreviated), %# = # for root else %.
+        PROMPT='%m %~ %# '
       '';
     };
     bash = {
