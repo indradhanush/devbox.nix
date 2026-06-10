@@ -3,7 +3,11 @@
   lib,
   config,
   ...
-}: {
+}: let
+  # asdf prepends its shims dir to PATH. Both bash and zsh need this or
+  # asdf-managed tools (e.g. go) won't resolve once zsh is the login shell.
+  asdfInit = ". ${pkgs.asdf-vm}/etc/profile.d/asdf-prepare.sh";
+in {
   home = {
     username = "ubuntu";
     homeDirectory = "/home/ubuntu";
@@ -34,11 +38,18 @@
 
   programs = {
     home-manager.enable = true;
-    zsh.enable = true;
+    zsh = {
+      enable = true;
+      initContent = lib.mkAfter ''
+        ${asdfInit}
+        # %~ = cwd (~-abbreviated), %# = # for root else %.
+        PROMPT='%~ %# '
+      '';
+    };
     bash = {
       enable = true;
       initExtra = ''
-        . ${pkgs.asdf-vm}/etc/profile.d/asdf-prepare.sh
+        ${asdfInit}
       '';
     };
   };
