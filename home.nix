@@ -61,6 +61,7 @@ in {
     home-manager.enable = true;
     # Installs zoxide and injects the `z` jump function into zsh/bash.
     zoxide.enable = true;
+    tmux.enable = true;
     zsh = {
       enable = true;
       initContent = lib.mkAfter ''
