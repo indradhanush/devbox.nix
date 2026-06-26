@@ -64,6 +64,11 @@ in {
     tmux.enable = true;
     zsh = {
       enable = true;
+      # .zshenv is sourced for all zsh invocations (interactive, login, and
+      # non-interactive SSH). PATH must be set here so `ssh host "cmd"` works.
+      envExtra = ''
+        export PATH="$HOME/.nix-profile/bin:$PATH"
+      '';
       initContent = lib.mkAfter ''
         ${asdfInit}
         # %m = hostname, %~ = cwd (~-abbreviated), %# = # for root else %.
