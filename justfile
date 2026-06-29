@@ -22,8 +22,9 @@ bootstrap:
     rsync -av ./ ubuntu@$VM_IP:~/devbox/
     ssh ubuntu@$VM_IP 'bash ~/devbox/bootstrap.sh'
 
-# Sync to VM, apply home-manager, pull back flake.lock
+# Sync to VM, apply home-manager, pull back flake.lock.
+# On a fresh VM (Nix not yet installed), runs bootstrap.sh instead.
 sync:
     rsync -av ./ ubuntu@$VM_IP:~/devbox/
-    ssh ubuntu@$VM_IP 'source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh && cd ~/devbox && home-manager switch -b backup --flake .#ubuntu'
+    ssh ubuntu@$VM_IP 'if [[ -f /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]]; then source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh && home-manager switch -b backup --flake ~/devbox#ubuntu; else bash ~/devbox/bootstrap.sh; fi'
     scp ubuntu@$VM_IP:~/devbox/flake.lock ./flake.lock
