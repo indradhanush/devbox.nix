@@ -33,7 +33,7 @@ apply_home_manager() {
   username=$(whoami)
   log "applying home-manager config for ${username}"
   nix --extra-experimental-features 'nix-command flakes' \
-    run home-manager/master -- switch --flake "${SCRIPT_DIR}#${username}"
+    run home-manager/master -- switch -b backup --flake "${SCRIPT_DIR}#${username}"
 }
 
 install_docker() {
