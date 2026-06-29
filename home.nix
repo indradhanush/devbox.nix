@@ -35,6 +35,7 @@ in {
       just
       gnumake
       tree
+      watchexec
       # byoh single-box dev loop (Set A): kind mgmt cluster, kubectl, tilt.
       # clusterctl is the pinned v1.4.4 let-binding above (shadows pkgs.clusterctl).
       kind
