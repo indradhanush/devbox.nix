@@ -8,6 +8,11 @@
   # asdf-managed tools (e.g. go) won't resolve once zsh is the login shell.
   asdfInit = ". ${pkgs.asdf-vm}/etc/profile.d/asdf-prepare.sh";
 
+  # Fallback go version for asdf shims invoked outside any project directory
+  # (e.g. `go-get-tool`'s `mktemp -d && cd` pattern in byoh's Makefile), where
+  # no `.tool-versions` is found. Per-project `.tool-versions` files still win.
+  golangGlobalVersion = "1.22.12";
+
   # clusterctl pinned to v1.4.4 to match the CAPI version the byoh provider is
   # exercised against (test/e2e/config/provider.yaml). nixpkgs ships only the
   # latest clusterctl, which would `clusterctl init` a newer, likely-
@@ -57,6 +62,24 @@ in {
     if [[ "$current_shell" != "$zsh_path" ]]; then
       $DRY_RUN_CMD /usr/bin/sudo /usr/bin/chsh -s "$zsh_path" "$USER"
     fi
+  '';
+
+  # Installs the asdf golang plugin and sets a global fallback version, so
+  # `go` resolves even outside a project with its own `.tool-versions` (see
+  # golangGlobalVersion above). Runs on every switch; each step is a no-op
+  # once already satisfied.
+  home.activation.installAsdfGolang = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    # Activation's PATH excludes /usr/bin, but asdf's golang plugin shells
+    # out to the system curl at /usr/bin/curl to download the toolchain.
+    export PATH="/usr/bin:/bin:$PATH"
+    asdf="${pkgs.asdf-vm}/bin/asdf"
+    if ! $asdf plugin list 2>/dev/null | grep -qxF golang; then
+      $DRY_RUN_CMD $asdf plugin add golang
+    fi
+    if ! $asdf list golang 2>/dev/null | tr -d ' ' | grep -qxF "${golangGlobalVersion}"; then
+      $DRY_RUN_CMD $asdf install golang ${golangGlobalVersion}
+    fi
+    $DRY_RUN_CMD $asdf set -u golang ${golangGlobalVersion}
   '';
 
   programs = {
