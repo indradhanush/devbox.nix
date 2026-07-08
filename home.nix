@@ -68,11 +68,13 @@ in {
       enable = true;
       # .zshenv is sourced for all zsh invocations (interactive, login, and
       # non-interactive SSH). PATH must be set here so `ssh host "cmd"` works.
+      # asdfInit also has to live here (not just initContent/.zshrc) so
+      # asdf-managed tools like `go` resolve over non-interactive SSH too.
       envExtra = ''
         export PATH="$HOME/.nix-profile/bin:$PATH"
+        ${asdfInit}
       '';
       initContent = lib.mkAfter ''
-        ${asdfInit}
         # %m = hostname, %~ = cwd (~-abbreviated), %# = # for root else %.
         PROMPT='%m %~ %# '
       '';
