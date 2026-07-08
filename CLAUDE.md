@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repo is
 
-Reproducible dev box configuration for an Ubuntu 24.04 VM. Nix + home-manager manages dev tools (`go`, `make`). Docker is managed separately via the official apt repo because its daemon requires systemd integration unavailable to home-manager on non-NixOS.
+Reproducible dev box configuration for an Ubuntu 24.04 VM. Nix + home-manager manages dev tools (`make`, etc.). `go` is deliberately left out of Nix and managed by asdf instead, for per-project version switching (via each project's `.tool-versions`) without PATH conflicts. Docker is managed separately via the official apt repo because its daemon requires systemd integration unavailable to home-manager on non-NixOS.
 
 ## Architecture
 
