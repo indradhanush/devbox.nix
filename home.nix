@@ -48,6 +48,15 @@ in {
       kubectl
       tilt
       clusterctl
+      # byoh's Makefile builds a project-local kustomize v4.5.2 into
+      # bin/kustomize but never adds that dir to PATH. CAPI's e2e test
+      # framework (clusterctl) shells out to a bare `kustomize` for
+      # InfrastructureProvider type: kustomize, so it must resolve from
+      # PATH. kustomize_4 (nixpkgs' newest 4.x) is the closest match without
+      # a custom derivation; any 4.x is CLI-compatible with what the
+      # framework runs (`kustomize build <dir> --load-restrictor
+      # LoadRestrictionsNone`).
+      kustomize_4
     ];
   };
 
